@@ -46,3 +46,10 @@ Prevent requests without valid authentication headers.
 
 Add your own domain name and have it point to the running services (try adding a subdomain name to point to the processing server)
 > !NOTE: Domain names are not included in AWS’ free tier and will incur a cost.
+
+1. Git repository:
+    https://github.com/vnonline2008/cloud-developer
+2. A screenshot of the elastic beanstalk application dashboard after deployement
+  ![deploy-project](https://user-images.githubusercontent.com/90563576/164990708-d285dff9-fe80-4d50-ae9f-03e4a300398d.PNG)
+3. A link to the endpoint URL for a running elastic beanstalk deployment
+  http://project2-tungtt44-dev.us-east-1.elasticbeanstalk.com/filteredimage?image_url=https://khoanh24.com/uploads/w150//2020/02/25/hinh-anh-anime-buon-chat-20_97cea59c7.jpg
