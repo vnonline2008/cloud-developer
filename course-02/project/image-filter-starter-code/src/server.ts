@@ -39,7 +39,7 @@ import {filterImageFromURL, deleteLocalFiles} from './util/util';
   app.get( "/filteredimage", async ( req: express.Request, res: express.Response ) => {
     const image_url = req.query.image_url
     if (!image_url) {
-      res.status(500).send("The image_url doesn't exist")
+      res.status(404).send("The image_url doesn't exist")
     }
     try {
       const result = await filterImageFromURL(image_url)
