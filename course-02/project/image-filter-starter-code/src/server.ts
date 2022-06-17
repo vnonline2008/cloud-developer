@@ -32,9 +32,30 @@ import {filterImageFromURL, deleteLocalFiles} from './util/util';
   //! END @TODO1
   
   // Root Endpoint
+  app.get("/", async (req: express.Request, res: express.Response) => {
+    res.status(200).send("try Get/filteredimage?image_url={{}}")
+  })
   // Displays a simple message to the user
-  app.get( "/", async ( req, res ) => {
-    res.send("try GET /filteredimage?image_url={{}}")
+  app.get( "/filteredimage", async ( req: express.Request, res: express.Response ) => {
+    const image_url = req.query.image_url
+    if (!image_url) {
+      res.status(404).send("The image_url doesn't exist")
+    }
+    try {
+      const result = await filterImageFromURL(image_url)
+
+      // Using callback function to delete image path
+      res.status(200).sendFile(result, err => {
+        if (err) {
+          res.status(500).send("Error when trying to send a file")
+        } else {
+          // delete result
+          deleteLocalFiles([result])
+        }
+      })
+    } catch {
+      res.status(422).send("Oops! There is something wrong!")
+    }
   } );
   
 
