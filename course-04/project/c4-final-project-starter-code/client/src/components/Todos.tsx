@@ -45,16 +45,20 @@ export class Todos extends React.PureComponent<TodosProps, TodosState> {
   }
 
   onTodoCreate = async (event: React.ChangeEvent<HTMLButtonElement>) => {
+    console.log("check")
     try {
+      console.log("demo1")
       const dueDate = this.calculateDueDate()
       const newTodo = await createTodo(this.props.auth.getIdToken(), {
         name: this.state.newTodoName,
         dueDate
       })
+      console.log(newTodo)
       this.setState({
         todos: [...this.state.todos, newTodo],
         newTodoName: ''
       })
+      console.log("demo2")
     } catch {
       alert('Todo creation failed')
     }
@@ -97,7 +101,11 @@ export class Todos extends React.PureComponent<TodosProps, TodosState> {
         loadingTodos: false
       })
     } catch (e) {
-      alert(`Failed to fetch todos: ${e.message}`)
+      let error_message = 'Failed to fetch todos'
+      if (e instanceof Error) {
+        error_message = e.message
+      }
+      alert(error_message)
     }
   }
 
@@ -159,7 +167,7 @@ export class Todos extends React.PureComponent<TodosProps, TodosState> {
   renderTodosList() {
     return (
       <Grid padded>
-        {this.state.todos.map((todo, pos) => {
+        {this.state.todos?.map((todo, pos) => {
           return (
             <Grid.Row key={todo.todoId}>
               <Grid.Column width={1} verticalAlign="middle">
