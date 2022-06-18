@@ -17,7 +17,12 @@ export class TodosAccess {
     constructor(
         private readonly docClient: DocumentClient = new XAWS.DynamoDB.DocumentClient(),
         private readonly todosTable = process.env.TODOS_TABLE,
-        private readonly createdAtIndex = process.env.TODOS_CREATED_AT_INDEX
+        private readonly createdAtIndex = process.env.TODOS_CREATED_AT_INDEX,
+        private readonly bucketName = process.env.ATTACHMENT_S3_BUCKET,
+        private readonly signedUrlExpiration = process.env.SIGNED_URL_EXPIRATION,
+        private readonly s3Bucket = new XAWS.S3({
+            signatureVersion: 'v4'
+        })
     ){}
 
     /** Create todods */
@@ -79,8 +84,21 @@ export class TodosAccess {
         }).promise()
     }
 
+    /** Get signed URL from S3 bucket */
+    getSignedURL(todoId: string) {
+        const params = {
+            Bucket: this.bucketName,
+            Key: todoId,
+            Expires: Number(this.signedUrlExpiration)
+        }
+        return this.s3Bucket.getSignedUrl('putObject', params)
+    }
+
     /** Create attachment signed Url */
-    async createAttachmentPresignedUrl(userId: string, todoId: string, signedUrl: string): Promise<any> {
+    async createAttachmentPresignedUrl(userId: string, todoId: string): Promise<any> {
+        logger.info(`[Repo] Get Signed URL from S3 bucket by ${userId} & ${todoId}`)
+        const signedUrl = this.getSignedURL(todoId)
+        logger.info(`[Repo] SighedURL from s3 bucket ${signedUrl}`)
         logger.info('[Repo] Create signed Url for userId ', userId, ' todoId ', todoId)
         await this.docClient.update({
             TableName: this.todosTable,
@@ -93,6 +111,7 @@ export class TodosAccess {
                 ":url": signedUrl.split("?")[0]
             }
         }).promise()
+        logger.info('[Repo] Completed')
         return signedUrl
     }
 }

@@ -1,5 +1,4 @@
-import { TodosAccess } from './todosAcess'
-import { getSignedURL } from './attachmentUtils';
+import { TodosAccess } from '../dataLayer/todosAcess'
 // import { TodoItem } from '../models/TodoItem'
 import { CreateTodoRequest } from '../requests/CreateTodoRequest'
 import { UpdateTodoRequest } from '../requests/UpdateTodoRequest'
@@ -42,6 +41,5 @@ export async function deleteTodo(userId: string, todoId: string) {
 
 export async function createAttachmentPresignedUrl(userId: string, todoId: string) {
     logger.info(`[Service] Start create attachment signed URL for userId: ${userId} & todoId ${todoId}`)
-    const signedUrl = getSignedURL(todoId)
-    return await todosAccess.createAttachmentPresignedUrl(userId, todoId, signedUrl)
+    return await todosAccess.createAttachmentPresignedUrl(userId, todoId)
 }
