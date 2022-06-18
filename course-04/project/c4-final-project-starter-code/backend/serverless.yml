@@ -40,6 +40,13 @@ provider:
             - xray:PutTraceSegments
           Resource: "*"
 
+  custom:
+    documentation:
+      api:
+        info:
+          version: v1.0.0
+          title: Todos API
+          description: Todos API for serverless-todo-app
 
 functions:
 

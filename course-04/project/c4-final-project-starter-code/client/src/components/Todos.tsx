@@ -47,7 +47,7 @@ export class Todos extends React.PureComponent<TodosProps, TodosState> {
   onTodoCreate = async (event: React.ChangeEvent<HTMLButtonElement>) => {
     console.log("check")
     try {
-      if (this.state.newTodoName) {
+      if (!this.state.newTodoName.trim()) {
         throw Error("Field must not empty")
       }
       const dueDate = this.calculateDueDate()
